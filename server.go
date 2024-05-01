@@ -29,6 +29,7 @@ func addProduto(w http.ResponseWriter, r *http.Request) {
 	err := criaProduto(produtoBuscado)
 	if err != nil {
 		http.Error(w, "Bad Request", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
