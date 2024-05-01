@@ -1,12 +1,16 @@
 package main
 
 import (
+	"errors"
+
 	"github.com/roberthameyer/loja-digport-backend/model"
 )
 
+var produtos []model.Produto = []model.Produto{}
+
 // função que cria o catalogo de produtos do site
-func catalogoProdutos() []model.Produto {
-	produtos := []model.Produto{
+func catalogoProdutos() {
+	produtos = []model.Produto{
 		{
 			Nome:       "Pacote Espanha",
 			Descricao:  "Pacote de viagem para Espanha",
@@ -35,19 +39,29 @@ func catalogoProdutos() []model.Produto {
 			Imagem:     "Nome2.png",
 		},
 	}
-	return produtos
+
 }
 
 // função para buscar um produto por nome
 func produtosPorNome(nome string) []model.Produto {
-	produtos := catalogoProdutos()
-	catalogo := []model.Produto{}
+	resultado := []model.Produto{}
 
-	for i := range produtos {
-		produtoAtual := produtos[i]
-		if produtoAtual.Nome == nome {
-			catalogo = append(catalogo, produtoAtual)
+	for _, produtoBuscado := range produtos {
+		if produtoBuscado.Nome == nome {
+			resultado = append(resultado, produtoBuscado)
 		}
 	}
-	return catalogo
+
+	return resultado
+}
+
+// função para criar um produto e retorna erro se o ID já for cadastrado
+func criaProduto(produtoBuscado model.Produto) error {
+	for _, idProduto := range produtos {
+		if produtoBuscado.Id == idProduto.Id {
+			return errors.New("pacote com ID já cadastrado")
+		}
+	}
+	produtos = append(produtos, produtoBuscado)
+	return nil
 }
