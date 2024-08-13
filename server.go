@@ -1,49 +1,55 @@
 package main
 
-import (
-	"encoding/json"
-	"net/http"
+import "github.com/roberthameyer/loja-digport-backend/routes"
 
-	"github.com/roberthameyer/loja-digport-backend/model"
-)
-
-// função que inicia o server e cria o path de produtos
 func StartServer() {
-	http.HandleFunc("/produtos", produtosHandler)
-	http.ListenAndServe(":8080", nil)
+	routes.HandleRequests()
 }
 
-func produtosHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		buscaProduto(w, r)
-	} else if r.Method == "POST" {
-		addProduto(w, r)
-	}
-}
+// import (
+// 	"encoding/json"
+// 	"net/http"
 
-func addProduto(w http.ResponseWriter, r *http.Request) {
-	var produtoBuscado model.Produto
-	json.NewDecoder(r.Body).Decode(&produtoBuscado)
-	criaProduto(produtoBuscado)
+// 	"github.com/roberthameyer/loja-digport-backend/model"
+// )
 
-	err := criaProduto(produtoBuscado)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewDecoder(w).Encode(model.Erro(MensagemErro: err.Error()})
-		//http.Error(w, "Bad Request", http.StatusBadRequest)
-	}
+// // função que inicia o server e cria o path de produtos
+// func StartServer() {
+// 	http.HandleFunc("/produtos", produtosHandler)
+// 	http.ListenAndServe(":8080", nil)
+// }
 
-	w.WriteHeader(http.StatusCreated)
+// func produtosHandler(w http.ResponseWriter, r *http.Request) {
+// 	if r.Method == "GET" {
+// 		buscaProduto(w, r)
+// 	} else if r.Method == "POST" {
+// 		addProduto(w, r)
+// 	}
+// }
 
-}
+// func addProduto(w http.ResponseWriter, r *http.Request) {
+// 	var produtoBuscado model.Produto
+// 	json.NewDecoder(r.Body).Decode(&produtoBuscado)
+// 	criaProduto(produtoBuscado)
 
-func buscaProduto(w http.ResponseWriter, r *http.Request) {
-	queryNome := r.URL.Query().Get("nome") //adiciona um query parameter nome no endpoint /produtos
-	if queryNome != "" {
-		produtosFiltradosPorNome := produtosPorNome(queryNome)
-		json.NewEncoder(w).Encode(produtosFiltradosPorNome)
-	} else {
-		produtosBuscados := produtos
-		json.NewEncoder(w).Encode(produtosBuscados)
-	}
-}
+// 	err := criaProduto(produtoBuscado)
+// 	if err != nil {
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewDecoder(w).Encode(model.Erro{MensagemErro: err.Error()})
+// 		//http.Error(w, "Bad Request", http.StatusBadRequest)
+// 	}
+
+// 	w.WriteHeader(http.StatusCreated)
+
+// }
+
+// func buscaProduto(w http.ResponseWriter, r *http.Request) {
+// 	queryNome := r.URL.Query().Get("nome") //adiciona um query parameter nome no endpoint /produtos
+// 	if queryNome != "" {
+// 		produtosFiltradosPorNome := produtosPorNome(queryNome)
+// 		json.NewEncoder(w).Encode(produtosFiltradosPorNome)
+// 	} else {
+// 		produtosBuscados := produtos
+// 		json.NewEncoder(w).Encode(produtosBuscados)
+// 	}
+// }
