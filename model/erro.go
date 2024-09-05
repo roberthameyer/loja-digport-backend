@@ -1,5 +1,5 @@
 package model
 
 type Erro struct {
-	MensagemErro string `json:"MensagemErro"`
+	Mensagem string `json:"mensagem"`
 }
